@@ -27,13 +27,10 @@ pipeline {
             steps {
                 script {
                     docker.image('sonarqube:latest').inside {
-                        sh "/opt/sonar-scanner/bin/sonar-scanner"
+                        sh "/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=squ_4b6af670fa704f908b602b0e00d8848a428fb779"
                     }
                 }
             }
         }
     }
 }
-
-             
-
