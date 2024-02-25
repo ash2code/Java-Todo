@@ -4,14 +4,12 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout your source code from GitHub
                 git branch: 'main', url: 'https://github.com/ash2code/Java-Todo.git'
             }
         }
 
         stage('Build') {
             steps {
-                // Build your Java project using Maven commands
                 sh '''
                     mvn clean package
                     # Add other build commands as needed
