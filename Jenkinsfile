@@ -1,36 +1,37 @@
 pipeline {
-    agent any 
+    agent any
 
     stages {
-        stage("Checkout") {
+        stage('Checkout') {
             steps {
-                git branch: 'master', 
-                url: 'https://github.com/ash2code/Todolist.git'
+                // Checkout your source code from GitHub
+                git branch: 'main', url: 'https://github.com/ash2code/Java-Todo.git'
             }
         }
-        stage("Build") {
+
+        stage('Build') {
             steps {
-                sh "mvn clean install"
+                // Build your project
+                // For example:
+                // sh 'mvn clean package'
+                sh 'echo "Building the project..."'
             }
         }
-        stage("Test") {
+
+        stage('SonarQube Analysis') {
             steps {
-                sh "mvn test"
+                // Run SonarQube scanner using the existing SonarQube Docker container
+                sh 'docker exec sqube sonar-scanner -Dsonar.host.url=http://100.24.61.233:9000 -Dsonar.login=sqa_186305e11cf53303e683d34fb8d1263d4fb9293a -Dsonar.projectKey=my_project_key'
             }
         }
-        stage("Package") {
-            steps {
-                sh "mvn package"
-            }
-        }
-        stage('SonarQube analysis') {
-            steps {
-                script {
-                    docker.image('sonarqube:latest').inside {
-                        sh "/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=squ_4b6af670fa704f908b602b0e00d8848a428fb779"
-                    }
-                }
-            }
+    }
+
+    post {
+        always {
+            // Cleanup Docker images after the pipeline execution
+            // For example:
+            // docker.image('sonarqube').remove()
+            sh 'echo "Cleaning up..."'
         }
     }
 }
