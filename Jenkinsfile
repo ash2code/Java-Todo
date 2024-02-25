@@ -11,27 +11,36 @@ pipeline {
 
         stage('Build') {
             steps {
-                // Build your project
-                // For example:
-                // sh 'mvn clean package'
-                sh 'echo "Building the project..."'
+                // Build your Java project using Maven commands
+                sh '''
+                    mvn clean package
+                    # Add other build commands as needed
+                '''
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                // Run SonarQube scanner using the existing SonarQube Docker container
-                sh 'docker exec sqube sonar-scanner -Dsonar.host.url=http://100.24.61.233:9000 -Dsonar.login=sqa_186305e11cf53303e683d34fb8d1263d4fb9293a -Dsonar.projectKey=my_project_key'
+                // Use the existing SonarQube container
+                sh '''
+                    docker exec sqube sonar-scanner \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=$SONAR_USER \
+                        -Dsonar.password=$SONAR_PASSWORD \
+                        -Dsonar.projectKey=java_todo_project \
+                        -Dsonar.projectName=Java Todo Application \
+                        # Add other SonarQube properties as needed
+                '''
             }
         }
-    }
 
-    post {
-        always {
-            // Cleanup Docker images after the pipeline execution
-            // For example:
-            // docker.image('sonarqube').remove()
-            sh 'echo "Cleaning up..."'
+        stage('Post-Actions') {
+            post {
+                always {
+                    // Cleanup tasks (e.g., remove temporary files, docker images)
+                    sh 'echo "Cleaning up..."'
+                }
+            }
         }
     }
 }
