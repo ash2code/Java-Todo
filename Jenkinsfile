@@ -28,13 +28,8 @@ pipeline {
                 '''
             }
         }
-
-        stage('Post-Actions') {
-            post {
-                always {
-                    sh 'echo "Cleaning up..."'
-                }
-            }
-        }
     }
 }
+
+
+       
