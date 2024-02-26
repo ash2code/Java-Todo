@@ -12,7 +12,6 @@ pipeline {
             steps {
                 sh '''
                     mvn clean package
-                    # Add other build commands as needed
                 '''
             }
         }
@@ -21,13 +20,11 @@ pipeline {
             steps {
                 // Use the existing SonarQube container
                 sh '''
-                    docker exec sqube sonar-scanner \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.login=$SONAR_USER \
-                        -Dsonar.password=$SONAR_PASSWORD \
-                        -Dsonar.projectKey=java_todo_project \
-                        -Dsonar.projectName=Java Todo Application \
-                        # Add other SonarQube properties as needed
+                    mvn clean verify sonar:sonar \
+                   -Dsonar.projectKey=hello-java \
+                   -Dsonar.projectName='hello-java' \
+                   -Dsonar.host.url=http://44.204.148.6:9000 \
+                   -Dsonar.token=sqp_d3d08fe0a3082fd586ff13b276b0cb2dd592e5ed
                 '''
             }
         }
@@ -35,7 +32,6 @@ pipeline {
         stage('Post-Actions') {
             post {
                 always {
-                    // Cleanup tasks (e.g., remove temporary files, docker images)
                     sh 'echo "Cleaning up..."'
                 }
             }
