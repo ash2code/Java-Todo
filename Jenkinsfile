@@ -18,7 +18,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                // Use the existing SonarQube container
+                // Use the existing  SonarQube container
                 sh '''
                     mvn clean verify sonar:sonar \
                    -Dsonar.projectKey=hello-java \
